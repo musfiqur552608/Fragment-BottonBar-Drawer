@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         //assign drawerlayout to actionbardrawertoggole
         actionBarDrawerToggle = ActionBarDrawerToggle(this,binding.drawerLayout, R.string.nav_open, R.string.nav_close)
 
+        //add action listener
         binding.drawerLayout.addDrawerListener(actionBarDrawerToggle)
         actionBarDrawerToggle.syncState()
 
@@ -33,11 +34,33 @@ class MainActivity : AppCompatActivity() {
         //set a fragment as a default
         setCurrentFragment(homeFragment)
 
+        //item click for open new fragment
+        binding.navview.setNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.home ->{
+                    setCurrentFragment(homeFragment)
+                    //close drawer when we click new item
+                    binding.drawerLayout.closeDrawers()
+                }
+
+                R.id.person ->{
+                    setCurrentFragment(personFragment)
+                    binding.drawerLayout.closeDrawers()
+                }
+                R.id.settings ->{
+                    setCurrentFragment(settingsFragment)
+                    binding.drawerLayout.closeDrawers()
+                }
+            }
+            true
+        }
+
         //set navigation item selected listenser for get the navigation translation
         binding.bottomBar.setOnNavigationItemSelectedListener {
             //use when to get id by condition
             when(it.itemId){
                 R.id.home ->setCurrentFragment(homeFragment)
+
                 R.id.person ->setCurrentFragment(personFragment)
                 R.id.settings ->setCurrentFragment(settingsFragment)
             }
@@ -45,6 +68,8 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+    // drawer open close
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if(actionBarDrawerToggle.onOptionsItemSelected(item)){
             true
